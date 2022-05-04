@@ -1,26 +1,53 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+<div>
+  <todo-form @add="addPost" @markAll="allMarkTodo" @deleteMark="deleteMarkTodo" />
+  <todo-list :posts="posts" @remove="removeTodo" />
+</div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import TodoForm from "@/components/TodoForm";
+import TodoList from "@/components/TodoList";
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    TodoForm, TodoList
+  },
+  data() {
+    return {
+      posts: []
+    }
+  },
+  methods: {
+    addPost(post) {
+      if (!post.text.trim()) return;
+      this.posts.push(post)
+    },
+    allMarkTodo() {
+      this.posts.forEach(post => {
+        post.check = true
+      })
+    },
+    deleteMarkTodo() {
+      this.posts = this.posts.filter(post => post.check !== true)
+    },
+    removeTodo(id) {
+      this.posts = this.posts.filter(post => post.id !== id)
+    }
   }
+
 }
+
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body{
+  height: 100vh;
+  background-color: #E5E5E5;
 }
 </style>
